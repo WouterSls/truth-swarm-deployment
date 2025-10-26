@@ -20,10 +20,9 @@ export async function sendMessageToAgent(
   sessionId?: string
 ): Promise<{ response: string; sessionId: string }> {
   try {
-    //const localUrl = "http://localhost:8000";
-    const url = "http://truth-swarm-production-62e4.up.railway.app";
+    const url = "https://truth-swarm-production-62e4.up.railway.app/chat";
 
-    const response = await fetch(`${url}/chat`, {
+    const response = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
