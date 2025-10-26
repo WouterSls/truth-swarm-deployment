@@ -21,10 +21,8 @@ export async function sendMessageToAgent(
 ): Promise<{ response: string; sessionId: string }> {
   try {
     //const localUrl = "http://localhost:8000";
+    const url = "http://truth-swarm-production-62e4.up.railway.app";
 
-    const url = "http://truth-swarm-production-62e4.up.railway.app:8000";
-
-    // Send message to agent's chat endpoint (with ASI:1 integration)
     const response = await fetch(`${url}/chat`, {
       method: "POST",
       headers: {
