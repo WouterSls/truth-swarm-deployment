@@ -91,15 +91,17 @@ export function AttestationWatcher() {
                 }, 5000);
               }, 2000);
             })
-            .catch((error: any) => {
+            .catch((error) => {
               // Ignore the SDK's internal boolean attribute error
+              const errorMessage =
+                error instanceof Error ? error.message : String(error);
               if (
-                error?.message?.includes("show") ||
-                error?.message?.includes("boolean")
+                errorMessage.includes("show") ||
+                errorMessage.includes("boolean")
               ) {
                 console.warn(
                   "Blockscout SDK rendering warning (safe to ignore):",
-                  error.message
+                  errorMessage
                 );
               } else {
                 console.error("Failed to show Blockscout toast:", error);
@@ -115,15 +117,16 @@ export function AttestationWatcher() {
                 processingRef.current.delete(eventId);
               }, 2000);
             });
-        } catch (err: any) {
+        } catch (err) {
           // Catch synchronous errors
+          const errorMessage = err instanceof Error ? err.message : String(err);
           if (
-            err?.message?.includes("show") ||
-            err?.message?.includes("boolean")
+            errorMessage.includes("show") ||
+            errorMessage.includes("boolean")
           ) {
             console.warn(
               "Blockscout SDK rendering warning (safe to ignore):",
-              err.message
+              errorMessage
             );
           } else {
             console.error("Error calling openTxToast:", err);

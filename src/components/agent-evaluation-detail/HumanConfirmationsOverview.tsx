@@ -13,9 +13,6 @@ import {
   ChevronUp,
 } from "lucide-react";
 import { useState } from "react";
-import { useTransactionPopup } from "@blockscout/app-sdk";
-import { useAccount } from "wagmi";
-import { SEPOLIA_CHAIN_ID } from "@/lib/blockscout";
 import { Button } from "../ui/button";
 
 interface HumanConfirmationsOverviewProps {
@@ -31,7 +28,6 @@ export function HumanConfirmationsOverview({
 }: HumanConfirmationsOverviewProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [isExpanded, setIsExpanded] = useState(false);
-
 
   const relevantAttestations = humanAttestations.filter(
     (att) => att.humanConfirmation.originalAttestationUID === attestationUID
@@ -173,7 +169,6 @@ export function HumanConfirmationsOverview({
                         View
                       </Button>
                     </div>
-
                   </div>
                 </Link>
               );

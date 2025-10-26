@@ -122,7 +122,7 @@ export async function sendToAgent(question: string, opts: SendOptions = {}) {
               rawEnvelope: item,
             };
           }
-        } catch (e) {
+        } catch (_e) {
           // skip malformed item
           continue;
         }

@@ -12,20 +12,17 @@ import { AgentVerseInfo } from "@/types/agents";
 import { HumanConfirmationsOverview } from "./HumanConfirmationsOverview";
 import { EvaluationDetailsOverview } from "./EvaluationDetailsOverview";
 
-
 interface AgentEvaluationDetailProps {
   address: string;
 }
 
-export function AgentEvaluationDetail({
-  address,
-}: AgentEvaluationDetailProps) {
+export function AgentEvaluationDetail({ address }: AgentEvaluationDetailProps) {
   const agentAttestationsQuery = useAgentAttestations();
   const humanAttestationsQuery = useHumanAttestations();
 
-
   const [agentInfo, setAgentInfo] = useState<AgentVerseInfo | null>(null);
-  const [attestation, setAttestation] = useState<AgentEvaluationAttestation | null>(null);
+  const [attestation, setAttestation] =
+    useState<AgentEvaluationAttestation | null>(null);
   const [humanVerificationCount, setHumanVerificationCount] = useState(0);
   const [isLoadingAgentInfo, setIsLoadingAgentInfo] = useState(true);
 
@@ -38,7 +35,6 @@ export function AgentEvaluationDetail({
       if (agentAttestation) {
         setAttestation(agentAttestation);
 
-        // Count human verifications for this attestation
         const verifications = humanAttestationsQuery.data.filter(
           (humanAtt) =>
             humanAtt.humanConfirmation.originalAttestationUID ===
@@ -222,8 +218,6 @@ export function AgentEvaluationDetail({
             attestationUID={attestation.uid}
             humanAttestations={humanAttestationsQuery.data}
           />
-
-
         </>
       )}
 

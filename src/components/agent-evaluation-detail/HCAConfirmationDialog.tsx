@@ -52,40 +52,37 @@ export function HumanAttestationDialog({
   const { openTxToast } = useNotification();
   const queryClient = useQueryClient();
 
-  // Blockscout SDK: Show transaction toast when hash is available
   useEffect(() => {
     if (hash) {
       console.log("📤 Human attestation transaction submitted:", hash);
 
-      // Wrap in try-catch to handle SDK errors gracefully
       try {
         openTxToast(SEPOLIA_CHAIN_ID, hash)
           .then(() => {
             console.log("✅ Blockscout toast displayed for human attestation");
           })
           .catch((err) => {
-            // Ignore the SDK's internal boolean attribute error
+            const errorMessage =
+              err instanceof Error ? err.message : String(err);
             if (
-              err?.message?.includes("show") ||
-              err?.message?.includes("boolean")
+              errorMessage.includes("show") ||
+              errorMessage.includes("boolean")
             ) {
               console.warn(
                 "Blockscout SDK rendering warning (safe to ignore):",
-                err.message
+                errorMessage
               );
             } else {
               console.error("Failed to show Blockscout toast:", err);
             }
           });
-      } catch (err: any) {
+      } catch (err) {
         // Catch synchronous errors
-        if (
-          err?.message?.includes("show") ||
-          err?.message?.includes("boolean")
-        ) {
+        const errorMessage = err instanceof Error ? err.message : String(err);
+        if (errorMessage.includes("show") || errorMessage.includes("boolean")) {
           console.warn(
             "Blockscout SDK rendering warning (safe to ignore):",
-            err.message
+            errorMessage
           );
         } else {
           console.error("Error calling openTxToast:", err);
@@ -94,7 +91,6 @@ export function HumanAttestationDialog({
     }
   }, [hash, openTxToast]);
 
-  // Invalidate queries when transaction is confirmed
   useEffect(() => {
     if (isSuccess && hash) {
       console.log("🎉 Human attestation confirmed on-chain:", hash);
@@ -115,8 +111,6 @@ export function HumanAttestationDialog({
     }
 
     try {
-      // Encode the attestation data according to the human schema
-      // Schema: bytes32 originalAttestationUID, address verifier, uint64 timestamp, bool approved, string comment
       const timestamp = BigInt(Math.floor(Date.now() / 1000));
 
       const encodedData = encodeAbiParameters(
@@ -126,7 +120,6 @@ export function HumanAttestationDialog({
         [attestationUID as `0x${string}`, address, timestamp, approved, comment]
       );
 
-      // Create the attestation request
       const attestationRequest = {
         schema: HUMAN_ATTESTATION_SCHEMA_UID,
         data: {
@@ -140,7 +133,6 @@ export function HumanAttestationDialog({
         },
       };
 
-      // Submit the attestation
       writeContract({
         address: EAS_CONTRACT_ADDRESS,
         abi: EAS_ABI,
@@ -152,7 +144,6 @@ export function HumanAttestationDialog({
     }
   };
 
-  // Reset and close dialog on success
   useEffect(() => {
     if (isSuccess && open) {
       const timer = setTimeout(() => {

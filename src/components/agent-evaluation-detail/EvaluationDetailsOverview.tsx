@@ -4,8 +4,7 @@ import { useState } from "react";
 import { ChevronDown, ChevronUp, ExternalLink } from "lucide-react";
 import {
   useEvaluationDetails,
-  EvaluationScoreWithDetails,
-  MetricDetail
+  MetricDetail,
 } from "@/hooks/useEvaluationDetails";
 import { HumanAttestationDialog } from "./HCAConfirmationDialog";
 
@@ -162,7 +161,9 @@ export function EvaluationDetailsOverview({
               <div className="text-xs text-muted-foreground space-y-1 pb-2 border-b border-border">
                 <div>
                   <span>Evaluator:</span>
-                  <span className="ml-2 font-mono">{details.evaluatorAgentAddress}</span>
+                  <span className="ml-2 font-mono">
+                    {details.evaluatorAgentAddress}
+                  </span>
                 </div>
                 <div>
                   <span>Evaluated:</span>
