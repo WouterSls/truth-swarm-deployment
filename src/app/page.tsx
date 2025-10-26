@@ -10,12 +10,10 @@ export default function Home() {
       <Header />
       <MaxWidthWrapper>
         <main className="min-h-screen">
-          {/** Chat interaction section */}
           <section>
             <ChatInteraction />
           </section>
 
-          {/** Search Evaluated Agents */}
           <section>
             <Dashboard />
           </section>

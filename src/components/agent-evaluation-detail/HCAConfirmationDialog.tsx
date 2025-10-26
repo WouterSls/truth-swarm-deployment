@@ -48,7 +48,7 @@ export function HumanAttestationDialog({
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
     hash,
   });
-  
+
   const { openTxToast } = useNotification();
   const queryClient = useQueryClient();
 
@@ -56,13 +56,41 @@ export function HumanAttestationDialog({
   useEffect(() => {
     if (hash) {
       console.log("📤 Human attestation transaction submitted:", hash);
-      openTxToast(SEPOLIA_CHAIN_ID, hash)
-        .then(() => {
-          console.log("✅ Blockscout toast displayed for human attestation");
-        })
-        .catch((err) => {
-          console.error("Failed to show Blockscout toast:", err);
-        });
+
+      // Wrap in try-catch to handle SDK errors gracefully
+      try {
+        openTxToast(SEPOLIA_CHAIN_ID, hash)
+          .then(() => {
+            console.log("✅ Blockscout toast displayed for human attestation");
+          })
+          .catch((err) => {
+            // Ignore the SDK's internal boolean attribute error
+            if (
+              err?.message?.includes("show") ||
+              err?.message?.includes("boolean")
+            ) {
+              console.warn(
+                "Blockscout SDK rendering warning (safe to ignore):",
+                err.message
+              );
+            } else {
+              console.error("Failed to show Blockscout toast:", err);
+            }
+          });
+      } catch (err: any) {
+        // Catch synchronous errors
+        if (
+          err?.message?.includes("show") ||
+          err?.message?.includes("boolean")
+        ) {
+          console.warn(
+            "Blockscout SDK rendering warning (safe to ignore):",
+            err.message
+          );
+        } else {
+          console.error("Error calling openTxToast:", err);
+        }
+      }
     }
   }, [hash, openTxToast]);
 
@@ -70,7 +98,7 @@ export function HumanAttestationDialog({
   useEffect(() => {
     if (isSuccess && hash) {
       console.log("🎉 Human attestation confirmed on-chain:", hash);
-      
+
       // Delay to allow blockchain to sync with indexers
       setTimeout(() => {
         console.log("🔄 Refreshing attestation data after confirmation...");

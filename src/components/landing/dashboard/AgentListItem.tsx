@@ -2,12 +2,16 @@ import { AgentScorePieChart } from "@/components/landing/dashboard/AgentScorePie
 import { Agent } from "@/types/agents";
 import Link from "next/link";
 import Image from "next/image";
+import { useState } from "react";
 
 interface EvaluatedAgentListItemProps {
   agent: Agent;
 }
 
 export function AgentListItem({ agent }: EvaluatedAgentListItemProps) {
+  const [imageError, setImageError] = useState(false);
+  const showFallback = !agent.avatarHref || imageError;
+
   const getGradeColor = (grade: string) => {
     if (grade.startsWith("A") || grade.startsWith("B+")) {
       return "text-green-600 bg-green-50";
@@ -24,16 +28,20 @@ export function AgentListItem({ agent }: EvaluatedAgentListItemProps) {
     <div className="flex items-center justify-between p-4 border border-border rounded-lg hover:bg-muted/30 transition-colors">
       <div className="flex items-center space-x-6">
         <div className="flex items-center justify-center w-8 h-8 bg-muted rounded-full">
-          <span className="text-sm font-medium text-muted-foreground">
-            <Image 
-              src={agent.avatarHref} 
-              alt="agent avatar" 
+          {showFallback ? (
+            <span className="text-sm font-medium text-muted-foreground">
+              {agent.agentName.charAt(0).toUpperCase()}
+            </span>
+          ) : (
+            <Image
+              src={agent.avatarHref}
+              alt="agent avatar"
               width={32}
               height={32}
               className="rounded-full"
+              onError={() => setImageError(true)}
             />
-            {/** # -> First letter if no image */}
-          </span>
+          )}
         </div>
 
         <div className="flex flex-col">

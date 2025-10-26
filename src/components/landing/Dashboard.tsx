@@ -10,8 +10,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
-import { History, Eye } from "lucide-react";
 import { AgentList } from "./dashboard/AgentList";
 import { AttestationWatcher } from "./dashboard/AttestationWatcher";
 import { useAgents } from "@/hooks/useAgents";
@@ -38,8 +36,6 @@ export function Dashboard() {
     isLoading: isLoadingAgents,
     error: agentsError,
   } = useAgents(agentAttestations, humanAttestations);
-
-
 
   if (
     agentAttestationsQuery.isLoading ||
@@ -91,13 +87,11 @@ export function Dashboard() {
     <>
       {/* Blockscout SDK: Real-time attestation event monitoring with toast notifications */}
       <AttestationWatcher />
-      
+
       <div className="px-10 mx-auto">
         {/** Header with Blockscout Transaction History */}
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl text-foreground">Evaluated Agents</h2>
-          
-
         </div>
 
         {/** Search & Filter */}
@@ -119,31 +113,31 @@ export function Dashboard() {
           </div>
         </div>
 
-      {/** Agents List with metrics */}
-      <div>
-        <Tabs defaultValue="all" className="w-full">
-          <TabsList>
-            <TabsTrigger value="all">All</TabsTrigger>
-            <TabsTrigger value="human">Human verified</TabsTrigger>
-            <TabsTrigger value="agent">Evaluated</TabsTrigger>
-          </TabsList>
-          <TabsContent value="all">
-            <AgentList filteredAgentsList={getAllAgents()} tabValue="all" />
-          </TabsContent>
-          <TabsContent value="human">
-            <AgentList
-              filteredAgentsList={getHumanVerifiedAgents()}
-              tabValue="human"
-            />
-          </TabsContent>
-          <TabsContent value="agent">
-            <AgentList
-              filteredAgentsList={getEvaluatedAgents()}
-              tabValue="agent"
-            />
-          </TabsContent>
-        </Tabs>
-      </div>
+        {/** Agents List with metrics */}
+        <div>
+          <Tabs defaultValue="all" className="w-full">
+            <TabsList>
+              <TabsTrigger value="all">All</TabsTrigger>
+              <TabsTrigger value="human">Human verified</TabsTrigger>
+              <TabsTrigger value="agent">Evaluated</TabsTrigger>
+            </TabsList>
+            <TabsContent value="all">
+              <AgentList filteredAgentsList={getAllAgents()} tabValue="all" />
+            </TabsContent>
+            <TabsContent value="human">
+              <AgentList
+                filteredAgentsList={getHumanVerifiedAgents()}
+                tabValue="human"
+              />
+            </TabsContent>
+            <TabsContent value="agent">
+              <AgentList
+                filteredAgentsList={getEvaluatedAgents()}
+                tabValue="agent"
+              />
+            </TabsContent>
+          </Tabs>
+        </div>
       </div>
     </>
   );
