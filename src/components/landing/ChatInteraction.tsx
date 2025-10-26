@@ -40,18 +40,15 @@ export function ChatInteraction() {
       timestamp: Date.now(),
     };
 
-    // Add user message to chat
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setIsLoading(true);
 
-    // Activate chat mode on first message
     if (!isActive) {
       setIsActive(true);
     }
 
     try {
-      // Send message to agent
       const { response, sessionId: newSessionId } = await sendMessageToAgent(
         userMessage.content,
         sessionId
